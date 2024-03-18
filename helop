@@ -117,3 +117,59 @@ app.post('/bfhl', (req, res) => {
     res.status(500).json({ is_success: false, error: 'Internal Server Error' });
   }
 });
+
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+const port = 3000;
+
+app.use(bodyParser.json());
+
+// POST endpoint for /bfhl route
+app.post('/bfhl', (req, res) => {
+    try {
+        const data = req.body.data;
+        const user_id = "john_doe_17091999";
+        const email = "john@xyz.com";
+        const roll_number = "ABCD123";
+        
+        // Arrays for even numbers, odd numbers, and uppercase alphabets
+        const even_numbers = [];
+        const odd_numbers = [];
+        const alphabets = [];
+
+        data.forEach(element => {
+            if (typeof element === 'number') {
+                if (element % 2 === 0) {
+                    even_numbers.push(element.toString());
+                } else {
+                    odd_numbers.push(element.toString());
+                }
+            } else if (typeof element === 'string' && /^[a-zA-Z]$/.test(element)) {
+                alphabets.push(element.toUpperCase());
+            }
+        });
+
+        const response = {
+            is_success: true,
+            user_id: user_id,
+            email: email,
+            roll_number: roll_number,
+            even_numbers: even_numbers,
+            odd_numbers: odd_numbers,
+            alphabets: alphabets
+        };
+
+        res.json(response);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ is_success: false, error: "Internal server error" });
+    }
+});
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
